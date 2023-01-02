@@ -34,7 +34,7 @@ TIMO = 1000*YOUNG
 ! =================================================!
 ! GEOMETRY DEFINITIONS - in preprocessor (/PREP7)
 ! =================================================!
-
+/PREP7 ! Enter the preprocessor 
 
 
 
@@ -59,11 +59,31 @@ TIMO = 1000*YOUNG
 
 
 
+
+FINISH	! Exit the preprocessor
+
 ! =================================================!
 ! SOLUTION - in solution (/SOL)
 ! =================================================!
+
+/SOL	! Enter the solution module
+
+
+
+
+
+
+
+SOLVE	! Obtain solution
+
+FINISH	! Exit the solution module
 
 
 ! =================================================!
 ! STUDY RESULTS - in postprocessor (/POST1) 
 ! =================================================!
+/POST1
+
+
+
+FINISH
