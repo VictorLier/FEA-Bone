@@ -1,1 +1,69 @@
+! =================================================!
+! ANSYS APDL-scripts - Project 2
+!     - Bone
+!    -----------------------------------------
+!       Geometry: [m]
+!       Force:    [N]
+!       Moment:   [Nm]
+!       Pressure: [Pa]
+! =================================================!
 
+FINISH		 ! Make sure current ANSYS module is closed
+/CLEAR,START ! Clear the ANSYS workspace 
+
+! White background
+/RGB,INDEX,100,100,100, 0   
+/RGB,INDEX, 80, 80, 80,13   
+/RGB,INDEX, 60, 60, 60,14   
+/RGB,INDEX, 0, 0, 0,15  
+
+! =================================================!
+! INPUT DATA - including material
+! =================================================!
+
+PI = 4*ATAN(1.0) ! Define variable PI as 3.1415...
+
+! Remember to update title
+*dim,TITLE_TEXT,string,20 ! Maximum 20 characters
+/TITLE,%TITLE_TEXT(1)% Project 2
+
+YOUNG = 210e9        !E.g. steel: 200 GPa = 200e3 MPa = 200e9 Pa [unit]
+POISSON = 0.3         !E.g. steel: 0.3 [-]
+TIMO = 1000*YOUNG
+
+! =================================================!
+! GEOMETRY DEFINITIONS - in preprocessor (/PREP7)
+! =================================================!
+
+
+
+
+
+! =================================================!
+! MATERIAL DEFINITIONS
+! =================================================! 
+
+
+
+! =================================================!
+! ELEMENT DEFINITIONS AND MESHING
+! =================================================!
+
+
+
+
+! =================================================!
+! DEFINE BOUNDARY CONDITIONS AND LOADS
+! =================================================! 
+
+
+
+
+! =================================================!
+! SOLUTION - in solution (/SOL)
+! =================================================!
+
+
+! =================================================!
+! STUDY RESULTS - in postprocessor (/POST1) 
+! =================================================!
