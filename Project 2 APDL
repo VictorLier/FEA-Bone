@@ -27,8 +27,12 @@ PI = 4*ATAN(1.0) ! Define variable PI as 3.1415...
 *dim,TITLE_TEXT,string,20 ! Maximum 20 characters
 /TITLE,%TITLE_TEXT(1)% Project 2
 
-YOUNG = 210e9        !E.g. steel: 200 GPa = 200e3 MPa = 200e9 Pa [unit]
-POISSON = 0.3         !E.g. steel: 0.3 [-]
+YOUNG_COMPACT = 19e9        !E.g. steel: 200 GPa = 200e3 MPa = 200e9 Pa [unit]
+YOUNG_SPONGY = 10e9
+YOUNG_MARROW = 0.001e9
+POISSON_COMPACT = 0.4         !E.g. steel: 0.3 [-]
+POISSON_SPONGY = 0.2
+POISSON_MARROW = 0.3
 TIMO = 1000*YOUNG
 
 ! =================================================!
