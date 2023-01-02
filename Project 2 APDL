@@ -310,17 +310,25 @@ L,132,1
 
 AL,all      ! Area from all lines
 
-
+*ASK,BONETYPE,Select bonetype: 1=>Compact bone 2=>Composite bone,1        ! Asks what model to use
 ! =================================================!
 ! MATERIAL DEFINITIONS
 ! =================================================! 
 
-
+MP,EX,1,YOUNG_COMPACT
+MP,PRXY,1,POISSON_COMPACT
+MP,EX,2,YOUNG_SPONGY
+MP,PRXY,2,POISSON_SPONGY
+MP,EX,3,YOUNG_MARROW
+MP,PRXY,3,POISSON_MARROW
 
 ! =================================================!
 ! ELEMENT DEFINITIONS AND MESHING
 ! =================================================!
 
+*IF,BONETYPE,EQ,1,THEN
+ET,1,PLANE183
+MSHAPE,0,2D
 
 
 
