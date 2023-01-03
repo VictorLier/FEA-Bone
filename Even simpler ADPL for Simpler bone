@@ -31,7 +31,13 @@ YOUNG_COMPACT = 19e9
 POISSON_COMPACT = 0.4
 TIMO = 1000*YOUNG_COMPACT
 
+!Thickness
 TH=0.035
+!Max stress on beam
+M=30.34963218
+I=7.366175743e-8
+h=0.0175
+sigmamax=(M/I)*(h/2)
 
 ! =================================================!
 ! GEOMETRY DEFINITIONS - in preprocessor (/PREP7)
@@ -98,7 +104,26 @@ D,ALL,,,,,,ALL
 NSEL,ALL
 
 !Force
-FK,4,FX,72.57
-!Moment
+FK,4,FX,72.66
+!Moment as pressure
+LSEL,S,,,2,3
+SFL,ALL,PRES,-sigmamax,sigmamax
+LSEL,ALL
 
+FINISH! Exit the preprocessor
 
+! =================================================!
+! SOLUTION - in solution (/SOL)
+! =================================================!
+
+/SOL	! Enter the solution module
+SOLVE	! Obtain solution
+
+FINISH	! Exit the solution module
+
+! =================================================!
+! STUDY RESULTS - in postprocessor (/POST1) 
+! =================================================!
+
+!Plane Stress plot in x direction
+/POST1
