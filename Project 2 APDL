@@ -33,7 +33,7 @@ YOUNG_MARROW = 0.001e9
 POISSON_COMPACT = 0.4         !E.g. steel: 0.3 [-]
 POISSON_SPONGY = 0.2
 POISSON_MARROW = 0.3
-TIMO = 1000*YOUNG
+TIMO = 1000*YOUNG_COMPACT
 
 ! =================================================!
 ! GEOMETRY DEFINITIONS - in preprocessor (/PREP7)
@@ -329,8 +329,11 @@ MP,PRXY,3,POISSON_MARROW
 *IF,BONETYPE,EQ,1,THEN
 ET,1,PLANE183
 MSHAPE,0,2D
-!LESIZE,ALL,,,4
-
+LESIZE,ALL,2,,,
+AMESH,ALL
+*ELSEIF,BONETYPE,EQ,2,THEN
+ET,1,PLANE183
+*ENDIF
 
 ! =================================================!
 ! DEFINE BOUNDARY CONDITIONS AND LOADS
