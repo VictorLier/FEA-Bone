@@ -35,9 +35,9 @@ TIMO = 1000*YOUNG_COMPACT
 TH=0.035
 !Max stress on beam
 M=30.34963218
-I=7.366175743e-8
+I=(1/12)*TH**4
 h=0.0175
-sigmamax=(M/I)*(h/2)
+sigmamax=(M/I)*(TH/2)
 
 ! =================================================!
 ! GEOMETRY DEFINITIONS - in preprocessor (/PREP7)
@@ -72,7 +72,7 @@ MP,PRXY,1,POISSON_COMPACT
 ! ELEMENT DEFINITIONS AND MESHING
 ! =================================================!
 
-LESIZE,ALL,0.004,,,
+LESIZE,ALL,0.002,,,
 
 *IF,TYPE,EQ,1,THEN
 ET,1,PLANE182
@@ -105,6 +105,8 @@ NSEL,ALL
 
 !Force
 FK,4,FX,72.66
+FK,4,FY,-485.5941149
+
 !Moment as pressure
 LSEL,S,,,2,3
 SFL,ALL,PRES,-sigmamax,sigmamax
