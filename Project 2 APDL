@@ -329,7 +329,7 @@ MP,PRXY,3,POISSON_MARROW
 *IF,BONETYPE,EQ,1,THEN
 ET,1,PLANE183
 MSHAPE,0,2D
-
+!LESIZE,ALL,,,4
 
 
 ! =================================================!
