@@ -1,9 +1,8 @@
 ! =================================================!
 ! Setting up for Loop
 ! =================================================!
-incr = 1	! Increment
-end  = 10	! End of increment
-meshl = 10 ! Initial meshing size
+Start = 1	! Increment
+End  = 3	! End of increment
 
 ! =================================================!
 ! ANSYS APDL-scripts - Simple Bone
@@ -16,11 +15,11 @@ meshl = 10 ! Initial meshing size
 ! =================================================!
 
 ! Make incremental loop
-*DO,STEP,incr,end,1
-FINISH		 ! Make sure current ANSYS module is closed
-/CLEAR,START ! Clear the ANSYS workspace
+*DO,DIV,Start,End,1
 
-meshl=meshl/1.5
+FINISH		 ! Make sure current ANSYS module is closed
+
+meshx=10/(1.25**DIV)
 
 ! White background
 /RGB,INDEX,100,100,100, 0   
@@ -340,7 +339,7 @@ MP,PRXY,3,POISSON_MARROW
 
 ET,1,PLANE183
 MSHAPE,0,2D
-LESIZE,ALL,meshl,,,
+LESIZE,ALL,meshx,,,
 
 TYPE,1
 MAT,1
@@ -385,8 +384,5 @@ FINISH
 ! Print to file
 ! =================================================!
 
-
-
-
-
+/CLEAR,START ! Clear the ANSYS workspace
 *ENDDO !End Loop
