@@ -389,7 +389,7 @@ FINISH
 ! =================================================!
 
 
-vget,meshx(1,1),2
+vget,meshx,2
 
 
 !Meshl er Længden af 
@@ -408,7 +408,7 @@ FILENAME = 'MeshData'   ! Fil Navn
 ('-------------------------------')
 
 
-*vwrite,meshx(1,1)
+*vwrite,meshx
 (' ')
 
 *cfclose
