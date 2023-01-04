@@ -818,12 +818,6 @@ FINISH	! Exit the preprocessor
 
 /SOL	! Enter the solution module
 
-
-
-
-
-
-
 SOLVE	! Obtain solution
 
 FINISH	! Exit the solution module
