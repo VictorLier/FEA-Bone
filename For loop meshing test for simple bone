@@ -19,7 +19,7 @@ End  = 3	! End of increment
 
 FINISH		 ! Make sure current ANSYS module is closed
 
-meshx=10/(1.25**DIV)
+meshx=10/(1.15**DIV)
 
 ! White background
 /RGB,INDEX,100,100,100, 0   
