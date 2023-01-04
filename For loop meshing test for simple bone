@@ -1,4 +1,10 @@
 ! =================================================!
+! Setting up for Loop
+! =================================================!
+Start = 1	! Increment
+End  = 3	! End of increment
+
+! =================================================!
 ! ANSYS APDL-scripts - Simple Bone
 !     - Bone
 !    -----------------------------------------
@@ -8,8 +14,12 @@
 !       Pressure: [Pa]
 ! =================================================!
 
+! Make incremental loop
+*DO,DIV,Start,End,1
+
 FINISH		 ! Make sure current ANSYS module is closed
-/CLEAR,START ! Clear the ANSYS workspace 
+
+meshx=10/(1.25**DIV)
 
 ! White background
 /RGB,INDEX,100,100,100, 0   
@@ -312,9 +322,6 @@ L,132,1
 
 AL,all      ! Area from all lines
 
-*ASK,FORCETYPE,Select force of bodyweight: 1=>Distributed 2=>Point force
-*ASK,KNEEJOINT,Select boundary in knee: 1=>Fully clamped 2=>Can rotate in kneejoint
-*ASK,BONETYPE,Select bonetype: 1=>Compact bone 2=>Composite bone,1        ! Asks what model to use
 ! =================================================!
 ! MATERIAL DEFINITIONS
 ! =================================================! 
@@ -330,14 +337,9 @@ MP,PRXY,3,POISSON_MARROW
 ! ELEMENT DEFINITIONS AND MESHING
 ! =================================================!
 
-*IF,BONETYPE,EQ,1,THEN
 ET,1,PLANE183
 MSHAPE,0,2D
-LESIZE,ALL,2,,,
-
-*ELSEIF,BONETYPE,EQ,2,THEN
-ET,1,PLANE183
-*ENDIF
+LESIZE,ALL,meshx,,,
 
 TYPE,1
 MAT,1
@@ -345,28 +347,16 @@ AMESH,ALL
 
 ! =================================================!
 ! DEFINE BOUNDARY CONDITIONS AND LOADS
-! =================================================! 
+! =================================================!
 
-*IF,KNEEJOINT,EQ,1,THEN
-NSEL,S,LOC,Y,-214.6875
-D,ALL,,,,,,ALL
-NSEL,ALL
-
-*ELSEIF,KNEEJOINT,EQ,2,THEN
 DK,73,,,,,,UX,UY
 DK,6,,,,,,UX
-*ENDIF
 
-*IF,FORCETYPE,EQ,1,THEN
 LSEL,S,LINE,,1,10
 NSLL,S,1
 *GET,tnum,NODE,0,COUNT,,,
 F,ALL,FY,-WEIGHT/tnum
 NSEL,ALL
-
-*ELSEIF,FORCETYPE,EQ,2,THEN
-FK,6,FY,-WEIGHT
-*ENDIF
 
 FINISH	! Exit the preprocessor
 
@@ -376,16 +366,9 @@ FINISH	! Exit the preprocessor
 
 /SOL	! Enter the solution module
 
-
-
-
-
-
-
 SOLVE	! Obtain solution
 
 FINISH	! Exit the solution module
-
 
 ! =================================================!
 ! STUDY RESULTS - in postprocessor (/POST1) 
@@ -426,3 +409,6 @@ FILENAME = 'MeshData'   ! Fil Navn
 *uilist,FILENAME,txt
 
 
+
+/CLEAR,START ! Clear the ANSYS workspace
+*ENDDO !End Loop
