@@ -53,6 +53,7 @@ Pagten (Uden Hinanden)
 Julie Maria
 Sjakalina
 Tessa
+
 [Omkvæd]
 For jeg' ben, pigerne på gulvet, ja, de ved, at jeg' ben
 Drengene ved bordet, ja, de ved, at jeg' ben
@@ -82,6 +83,7 @@ Ben, pigerne på gulvet, ja, de ved, at jeg' ben
 Drengene ved bordet, ja, de ved, at jeg' ben
 Før var jeg problembarn, nu' jeg bare ben
 Gør min' ting, så alle ved, jeg' benhård
+
 [Outro]
 (Du vil gi' din højre arm for at være ben
 Du vil gi' din højre arm, arh
