@@ -381,6 +381,8 @@ FINISH	! Exit the solution module
 SET,FIRST
 PLDISP,2
 
+NSORT,U,SUM,,1
+*GET,Maxdisp,SORT,,MAX
 
 FINISH
 
@@ -393,8 +395,7 @@ FINISH
 FILENAME = CHRVAL(DIV)   ! Fil Navn
 
 
-NSORT,U,SUM,,1
-*GET,Maxdisp,SORT,,MAX
+
 
 *cfopen,FILENAME,txt
 
