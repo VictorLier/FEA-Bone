@@ -3,10 +3,8 @@
 ! =================================================!
 Start = 1	! Increment
 End  = 3	! End of increment
-nincr = End - Start
-*dim,MeshSize,array,nincr,1         ! Dimension of array
-
-
+incru = end - start
+*dim,MeshLengths,table,10,1
 
 ! =================================================!
 ! ANSYS APDL-scripts - Simple Bone
@@ -388,9 +386,7 @@ FINISH
 ! Print to file
 ! =================================================!
 
-
-vget,MeshSize(1,1),2
-
+MeshLength(DIV,1) = meshx
 
 !Meshl er Længden af 
 
@@ -402,14 +398,13 @@ FILENAME = 'MeshData'   ! Fil Navn
 
 
 *vwrite
-('  Meshl')
+('Meshl')
 
 *vwrite
 ('-------------------------------')
 
-
-*vwrite,MeshSize(1,1)
-(' ')
+*vwrite,MeshLengths(1,1)
+(F)
 
 *cfclose
 
