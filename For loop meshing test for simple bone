@@ -403,10 +403,6 @@ FILENAME = 'MeshData'   ! Fil Navn
 
 
 *cfclose
-*END
-*uilist,FILENAME,txt
-
-
 
 /CLEAR,START ! Clear the ANSYS workspace
 *ENDDO !End Loop
