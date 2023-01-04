@@ -1,10 +1,10 @@
 ! =================================================!
 ! Setting up for Loop
 ! =================================================!
-Start = 1	! Increment
-End  = 3	! End of increment
-incru = end - start
-*dim,MeshLengths,table,10,1
+Start = 2	! Increment
+End  = 2	! End of increment
+!nincr = end - start
+!*dim,MeshLengths,table,nincr,1,1
 
 ! =================================================!
 ! ANSYS APDL-scripts - Simple Bone
@@ -386,25 +386,25 @@ FINISH
 ! Print to file
 ! =================================================!
 
-MeshLengths(DIV,1) = meshx
-
-!Meshl er Længden af 
-
 !*GET,Displaysment,NODE,33,U,SUM,,  !Vi skal finde spændning
 
-FILENAME = 'MeshData'   ! Fil Navn
+FILENAME = CHRVAL(DIV)   ! Fil Navn
 
 *cfopen,FILENAME,txt
 
 
-*vwrite
-('Meshl')
+!*vwrite,DIV,DIV
+!(2(E15.6))
+
+*vwrite,meshx,meshx
+(2(E15.6))
+
 
 *vwrite
 ('-------------------------------')
 
-*vwrite,MeshLengths(1,1)
-(F)
+!*vwrite,MeshLengths(1,1)
+!(F)
 
 *cfclose
 
