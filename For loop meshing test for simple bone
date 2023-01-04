@@ -390,7 +390,6 @@ FINISH
 
 FILENAME = 'MeshData'   ! Fil Navn
 
-*CREATE,ansuitmp
 *cfopen,FILENAME,txt
 
 
