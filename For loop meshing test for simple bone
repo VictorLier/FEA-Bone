@@ -386,7 +386,7 @@ FINISH
 
 !Meshl er Længden af 
 
-*GET,Displaysment,NODE,ALL,U,SUM,,  !Vi skal finde spændning
+*GET,Displaysment,NODE,33,U,SUM,,  !Vi skal finde spændning
 
 FILENAME = 'MeshData'   ! Fil Navn
 
