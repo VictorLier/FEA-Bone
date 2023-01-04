@@ -4,7 +4,7 @@
 Start = 1	! Increment
 End  = 3	! End of increment
 nincr = End - Start
-*dim,Fyval,array,nincr,1         ! Dimension of array
+*dim,Meshx,array,nincr,1         ! Dimension of array
 
 
 
@@ -389,7 +389,7 @@ FINISH
 ! =================================================!
 
 
-vget,meshx,2
+vget,Meshx(1,1),2
 
 
 !Meshl er Længden af 
@@ -408,7 +408,7 @@ FILENAME = 'MeshData'   ! Fil Navn
 ('-------------------------------')
 
 
-*vwrite,meshx
+*vwrite,Meshx(1,1)
 (' ')
 
 *cfclose
