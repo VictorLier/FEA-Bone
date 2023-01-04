@@ -386,7 +386,7 @@ FINISH
 ! Print to file
 ! =================================================!
 
-MeshLength(DIV,1) = meshx
+MeshLengths(DIV,1) = meshx
 
 !Meshl er Længden af 
 
