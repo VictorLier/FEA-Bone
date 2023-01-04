@@ -1,4 +1,11 @@
 ! =================================================!
+! Setting up for Loop
+! =================================================!
+incr = 1	! Increment
+end  = 10	! End of increment
+meshl = 10 ! Initial meshing size
+
+! =================================================!
 ! ANSYS APDL-scripts - Simple Bone
 !     - Bone
 !    -----------------------------------------
@@ -8,8 +15,12 @@
 !       Pressure: [Pa]
 ! =================================================!
 
+! Make incremental loop
+*DO,STEP,incr,end,1
 FINISH		 ! Make sure current ANSYS module is closed
-/CLEAR,START ! Clear the ANSYS workspace 
+/CLEAR,START ! Clear the ANSYS workspace
+
+meshl=meshl/1.5
 
 ! White background
 /RGB,INDEX,100,100,100, 0   
@@ -360,7 +371,6 @@ SOLVE	! Obtain solution
 
 FINISH	! Exit the solution module
 
-
 ! =================================================!
 ! STUDY RESULTS - in postprocessor (/POST1) 
 ! =================================================!
@@ -374,3 +384,9 @@ FINISH
 ! =================================================!
 ! Print to file
 ! =================================================!
+
+
+
+
+
+*ENDDO !End Loop
