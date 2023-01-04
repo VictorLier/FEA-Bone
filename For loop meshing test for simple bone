@@ -404,7 +404,6 @@ FILENAME = 'MeshData'   ! Fil Navn
 
 *cfclose
 *END
-/INPUT,ansuitmp
 *uilist,FILENAME,txt
 
 
