@@ -400,3 +400,29 @@ FINISH
 ! =================================================!
 ! Print to file
 ! =================================================!
+
+!Meshl er Længden af 
+
+*GET,Displaysment,NODE,ALL,U,SUM,,  !Vi skal finde spændning
+
+FILENAME = 'MeshData'   ! Fil Navn
+
+*CREATE,ansuitmp
+*cfopen,FILENAME,txt
+
+
+*vwrite
+('  Meshl       Displaysment')
+
+*vwrite
+('-------------------------------')
+
+
+
+
+*cfclose
+*END
+/INPUT,ansuitmp
+*uilist,FILENAME,txt
+
+
