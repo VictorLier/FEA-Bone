@@ -3,6 +3,10 @@
 ! =================================================!
 Start = 1	! Increment
 End  = 3	! End of increment
+nincr = End - Start
+*dim,Fyval,array,nincr,1         ! Dimension of array
+
+
 
 ! =================================================!
 ! ANSYS APDL-scripts - Simple Bone
@@ -384,9 +388,13 @@ FINISH
 ! Print to file
 ! =================================================!
 
+
+vget,meshx(1,1),2
+
+
 !Meshl er Længden af 
 
-*GET,Displaysment,NODE,33,U,SUM,,  !Vi skal finde spændning
+!*GET,Displaysment,NODE,33,U,SUM,,  !Vi skal finde spændning
 
 FILENAME = 'MeshData'   ! Fil Navn
 
@@ -394,13 +402,14 @@ FILENAME = 'MeshData'   ! Fil Navn
 
 
 *vwrite
-('  Meshl       Displaysment')
+('  Meshl')
 
 *vwrite
 ('-------------------------------')
 
 
-
+*vwrite,meshx(1,1)
+(' ')
 
 *cfclose
 
