@@ -42,6 +42,10 @@ WEIGHT = 400 ![N]
 ! =================================================!
 /PREP7 ! Enter the preprocessor
 
+*ASK,FORCETYPE,Select force of bodyweight: 1=>Distributed 2=>Point force
+*ASK,KNEEJOINT,Select boundary in knee: 1=>Fully clamped 2=>Can rotate in kneejoint 3=>Cartilage in knee
+*ASK,BONETYPE,Select bonetype: 1=>Compact bone 2=>Composite bone,1        ! Asks what model to use
+
 !Keypoints
 K,1,0,232.3125,0
 K,2,-6.1733,-242.3125,0
@@ -113,7 +117,7 @@ K,67,5,-235.6875,0
 K,68,0,-240.6875,0
 K,69,-13,-241.6875,0
 K,70,-22,-238.6875,0
-K,71,-29.8404,-234.6875,0
+K,71,-30,-234.5819,0
 K,72,-34,-231.6875,0
 K,73,-38,-229.6875,0
 K,74,-40,-229.6875,0
@@ -312,9 +316,30 @@ L,132,1
 
 AL,all      ! Area from all lines
 
-*ASK,FORCETYPE,Select force of bodyweight: 1=>Distributed 2=>Point force
-*ASK,KNEEJOINT,Select boundary in knee: 1=>Fully clamped 2=>Can rotate in kneejoint
-*ASK,BONETYPE,Select bonetype: 1=>Compact bone 2=>Composite bone,1        ! Asks what model to use
+*IF,KNEEJOINT,EQ,3,THEN
+/AUX15  
+!*  
+IOPTN,IGES,SMOOTH   
+IOPTN,MERGE,YES 
+IOPTN,SOLID,YES 
+IOPTN,SMALL,YES 
+IOPTN,GTOLER, DEFA  
+IGESIN,'Only cartilage_attempt','igs','..\Bone\'
+
+     !133 -216.0000      17.64884     -2610.351         0.0000   0.0000   0.0000  x=-216-(-89)=-127, y= 17.64884-(-214.6875)=232.33634 z=-2610.351 
+     !134 -181.0000     -5.351163     -2610.351         0.0000   0.0000   0.0000
+     !135 -157.0000     -2.245532     -2610.351         0.0000   0.0000   0.0000
+     !136 -118.0000      15.64884     -2610.351         0.0000   0.0000   0.0000
+
+
+/PREP7 ! Enter the preprocessor
+LGEN,2,133,134,,127,-232.33634,2610.351,,,1
+NUMMRG,KP,0.001
+*ENDIF
+
+AL,76,77,78,79,80,81,82,133
+AL,64,65,66,67,68,69,70,134
+
 ! =================================================!
 ! MATERIAL DEFINITIONS
 ! =================================================! 
