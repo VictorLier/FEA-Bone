@@ -1,0 +1,102 @@
+! =================================================!
+! ANSYS APDL-scripts - Verification
+!    -----------------------------------------
+!       Geometry: [m]
+!       Force:    [N]
+!       Moment:   [Nm]
+!       Pressure: [Pa]
+! =================================================!
+
+FINISH		 ! Make sure current ANSYS module is closed
+/CLEAR,START ! Clear the ANSYS workspace 
+
+! White background
+/RGB,INDEX,100,100,100, 0   
+/RGB,INDEX, 80, 80, 80,13   
+/RGB,INDEX, 60, 60, 60,14   
+/RGB,INDEX, 0, 0, 0,15  
+
+! =================================================!
+! INPUT DATA - including material
+! =================================================!
+
+PI = 4*ATAN(1.0) ! Define variable PI as 3.1415...
+
+! Remember to update title
+*dim,TITLE_TEXT,string,20 ! Maximum 20 characters
+/TITLE,%TITLE_TEXT(1)% ADPL verification of simple bone
+
+!Young and Poission
+YOUNG_COMPACT = 19e9
+POISSON_COMPACT = 0.4
+
+YOUNG_SPONGY = 10e9
+POISSON_SPONGY = 0.2
+
+YOUNG_MARROW = 0.001e9
+POISSON_MARROW = 0.3
+
+TIMO = 1000*YOUNG_COMPACT
+
+TH = 0.035 !Thickness
+
+
+!Max Stress on beam
+M=30.34963218
+I=(1/12)*TH**4
+h=0.0175
+sigmamax=(M/I)*(TH/2)
+
+! =================================================!
+! GEOMETRY DEFINITIONS - in preprocessor (/PREP7)
+! =================================================!
+/PREP7 ! Enter the preprocessor
+
+!Keypoints
+K,1,0,0,0
+K,2,0.08,0,0
+K,3,0.013,0,0
+K,4,0.022,0,0
+K,5,0.027,0,0
+K,6,0.035,0,0
+K,7,0,0.4225,0
+K,8,0.08,0.4225,0
+K,9,0.013,0.4225,0
+K,10,0.022,0.4225,0
+K,11,0.027,0.4225,0
+K,12,0.035,0.4225,0
+
+
+
+!Lines
+L,1,2
+L,2,8
+L,8,7
+L,7,1
+
+L,2,3
+L,3,9
+L,9,8
+
+L,3,4
+L,4,10
+L,10,9
+
+L,4,5
+L,5,11
+L,11,10
+
+L,5,6
+L,6,12
+L,12,11
+
+!Area from lines
+AL,1,2,3,4
+
+AL,5,6,7,2
+
+AL,8,9,10,6
+
+AL,11,12,13,9
+
+AL,14,15,16,12
