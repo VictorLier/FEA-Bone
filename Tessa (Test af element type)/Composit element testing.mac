@@ -100,3 +100,63 @@ AL,8,9,10,6
 AL,11,12,13,9
 
 AL,14,15,16,12
+
+
+
+! =================================================!
+! MATERIAL DEFINITIONS
+! =================================================! 
+
+MP,EX,1,YOUNG_COMPACT
+MP,PRXY,1,POISSON_COMPACT
+MP,EX,2,YOUNG_SPONGY
+MP,PRXY,2,POISSON_SPONGY
+MP,EX,3,YOUNG_MARROW
+MP,PRXY,3,POISSON_MARROW
+
+
+! =================================================!
+! ELEMENT DEFINITIONS AND MESHING
+! =================================================!
+
+!Compact
+ET,1,PLANE183
+MSHAPE,0,2D
+TYPE,1
+MAT,1
+AESIZE,1,1
+AMESH,2
+
+ET,1,PLANE183
+MSHAPE,0,2D
+TYPE,1
+MAT,1
+AESIZE,5,1
+AMESH,2
+
+
+
+!Spongy
+ET,2,PLANE183
+MSHAPE,0,2D
+TYPE,2
+MAT,2
+AESIZE,2,2
+AMESH,3
+
+ET,2,PLANE183
+MSHAPE,0,2D
+TYPE,2
+MAT,2
+AESIZE,4,2
+AMESH,3
+
+
+!Marrow
+ET,3,PLANE183
+MSHAPE,0,2D
+TYPE,3
+MAT,3
+AESIZE,3,1
+AMESH,1
+
