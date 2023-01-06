@@ -125,7 +125,7 @@ NodeSize = 0.008
 !Compact
 ET,1,PLANE183
 KEYOPT,1,1,0
-KEYOPT,1,3,3
+KEYOPT,1,3,3    !de er fint til at bevise - Da det bare er C-mtricen er der vendt?? i forhold til Plane strain, der bliver brugt i den rigtige model
 R,1,TH
 TYPE,1
 MAT,1
