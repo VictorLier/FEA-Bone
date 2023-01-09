@@ -33,13 +33,12 @@ POISSON_COMPACT = 0.4
 YOUNG_SPONGY = 10e9
 POISSON_SPONGY = 0.2
 
-YOUNG_MARROW = 1e9  !Ændret lidt for at simplificere
+YOUNG_MARROW = 5e9  !Ændret lidt for at simplificere
 POISSON_MARROW = 0.3
 
 TIMO = 1000*YOUNG_COMPACT
 
 TH = 0.035 !Thickness
-
 
 !Max Stress on beam
 M=30.34963218
@@ -66,42 +65,30 @@ K,10,0.022,0.4225,0
 K,11,0.027,0.4225,0
 K,12,0.035,0.4225,0
 
-
-
 !Lines
 L,1,2
 L,2,8
 L,8,7
 L,7,1
-
 L,2,3
 L,3,9
 L,9,8
-
 L,3,4
 L,4,10
 L,10,9
-
 L,4,5
 L,5,11
 L,11,10
-
 L,5,6
 L,6,12
 L,12,11
 
 !Area from lines
 AL,1,2,3,4
-
 AL,5,6,7,2
-
 AL,8,9,10,6
-
 AL,11,12,13,9
-
 AL,14,15,16,12
-
-
 
 ! =================================================!
 ! MATERIAL DEFINITIONS
@@ -114,13 +101,11 @@ MP,PRXY,2,POISSON_SPONGY
 MP,EX,3,YOUNG_MARROW
 MP,PRXY,3,POISSON_MARROW
 
-
 ! =================================================!
 ! ELEMENT DEFINITIONS AND MESHING
 ! =================================================!
 
-NodeSize = 0.008
-
+NodeSize = 0.005
 
 !Compact
 ET,1,PLANE183
@@ -168,7 +153,6 @@ MSHAPE,0,2D
 MSHKEY,1
 AMESH,4
 
-
 !Marrow
 ET,1,PLANE183
 KEYOPT,1,1,0
@@ -192,19 +176,18 @@ D,ALL,,,,,,ALL
 NSEL,ALL
 
 !Force
+SELTOL,1E-6
 NSEL,S,LOC,Y,0.4225
 NSEL,R,LOC,X,0
-
-!Displacement
-!D,ALL,UX,0.00084,,,,
-
-!Force
 F,ALL,FX,72.66
-!F,ALL,FY,-485.5941149
 
-
+!Moments pressure
+F,ALL,FY,-M/TH
 NSEL,ALL
-
+NSEL,S,LOC,Y,0.4225
+NSEL,R,LOC,X,TH
+F,ALL,FY,M/TH
+NSEL,ALL
 
 FINISH! Exit the preprocessor
 
