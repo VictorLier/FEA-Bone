@@ -29,6 +29,7 @@ PI = 4*ATAN(1.0) ! Define variable PI as 3.1415...
 *dim,TITLE_TEXT,string,20 ! Maximum 20 characters
 /TITLE,%TITLE_TEXT(1)% Project 2
 
+!Materiale properties
 YOUNG_COMPACT = 19e3  ![N/mm^2]
 YOUNG_SPONGY = 10e3   ![N/mm^2]
 YOUNG_MARROW = 0.001e3 ![N/mm^2]
@@ -39,11 +40,14 @@ POISSON_MARROW = 0.3
 POISSON_CARTILAGE = 0.3
 TIMO = 1000*YOUNG_COMPACT
 
+!Estimating human of 80 kg
 WEIGHT = 400 ![N]
 
 ! =================================================!
 ! GEOMETRY DEFINITIONS - in preprocessor (/PREP7)
 ! =================================================!
+
+!Loading Keypoints
 /AUX15  
 !*  
 IOPTN,IGES,SMOOTH   
@@ -158,6 +162,7 @@ LSEL,ALL
 ! MATERIAL DEFINITIONS
 ! =================================================! 
 
+!Materials
 MP,EX,1,YOUNG_COMPACT
 MP,PRXY,1,POISSON_COMPACT
 MP,EX,2,YOUNG_SPONGY
