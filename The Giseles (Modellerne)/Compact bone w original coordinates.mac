@@ -30,7 +30,7 @@ PI = 4*ATAN(1.0) ! Define variable PI as 3.1415...
 YOUNG_COMPACT = 19e3  ![N/mm^2]
 YOUNG_SPONGY = 10e3   ![N/mm^2]
 YOUNG_MARROW = 0.001e3 ![N/mm^2]
-YOUNG_CARTILAGE = 25
+YOUNG_CARTILAGE = 2500
 POISSON_COMPACT = 0.4         !E.g. steel: 0.3 [-]
 POISSON_SPONGY = 0.2
 POISSON_MARROW = 0.3
@@ -60,7 +60,7 @@ NUMCMP,LINE
 NUMCMP,KP
 LGEN,2,1,131,,-0.0404,0.0136,2842.686,,,1
 
-*ASK,FORCETYPE,Select force of bodyweight: 1=>Distributed 2=>Point force
+*ASK,FORCETYPE,Select force of bodyweight: 1=>Distributed 2=>Point force 3=>Distributed on hip cartilage
 *ASK,KNEEJOINT,Select boundary in knee: 1=>Fully clamped 2=>Can rotate in kneejoint 3=>Cartilage in knee
 
 AL,all      ! Area from all lines
@@ -78,10 +78,31 @@ IGESIN,'Only cartilage retry','igs',' '
 /PREP7 ! Enter the preprocessor
 LGEN,2,132,133,,0,0,2842.686,,,1
 NUMMRG,KP,0.001
-*ENDIF
 
 AL,74,75,76,77,78,79,80,81,133
 AL,64,65,66,67,68,69,70,132
+*ENDIF
+
+*IF,FORCETYPE,EQ,3,THEN
+/AUX15  
+!*  
+IOPTN,IGES,SMOOTH   
+IOPTN,MERGE,YES 
+IOPTN,SOLID,YES 
+IOPTN,SMALL,YES 
+IOPTN,GTOLER, DEFA  
+IGESIN,'Hip cartilage','igs',' '
+
+/PREP7 ! Enter the preprocessor
+LGEN,2,134,134,,-0.0404,0.0136,2842.686,,,1
+NUMMRG,KP,0.001
+
+LSEL,S,LINE,,128,131
+LSEL,A,LINE,,1,12,
+LSEL,A,LINE,,134,134
+AL,ALL
+LSEL,ALL
+*ENDIF
 
 ! =================================================!
 ! MATERIAL DEFINITIONS
@@ -113,6 +134,12 @@ AMESH,1
 MAT,4
 AMESH,2,3
 
+*IF,FORCETYPE,EQ,3,THEN
+MAT,4
+AMESH,4
+*ENDIF
+
+
 ! =================================================!
 ! DEFINE BOUNDARY CONDITIONS AND LOADS
 ! =================================================! 
@@ -129,18 +156,37 @@ D,ALL,,,,,,UX,UY
 KSEL,ALL
 NSEL,ALL
 
+*IF,FORCETYPE,LE,2,THEN
 KSEL,S,KP,,6,6
 NSLK,S
 D,ALL,,,,,,UX
 KSEL,ALL
 NSEL,ALL
 
+*ELSEIF,FORCETYPE,EQ,3,THEN
+LSEL,S,LINE,,134,134
+NSLL,S,0
+NSEL,R,LOC,X,-125,-90
+D,ALL,,,,,,UX
+LSEL,ALL
+NSEL,ALL
+*ENDIF
+
 *ELSEIF,KNEEJOINT,EQ,3,THEN
+*IF,FORCETYPE,LE,2,THEN
 KSEL,S,KP,,6,6
 NSLK,S
 D,ALL,,,,,,UX
 KSEL,ALL
 NSEL,ALL
+*ELSEIF,FORCETYPE,EQ,3,THEN
+LSEL,S,LINE,,134,134
+NSLL,S,0
+NSEL,R,LOC,X,-125,-90
+D,ALL,,,,,,UX
+LSEL,ALL
+NSEL,ALL
+*ENDIF
 
 LSEL,S,LINE,,133,133
 NSLL,S,0
@@ -171,6 +217,20 @@ NSEL,ALL
 
 *ELSEIF,FORCETYPE,EQ,2,THEN
 FK,6,FY,-WEIGHT
+
+*ELSEIF,FORCETYPE,EQ,3,THEN
+LSEL,S,LINE,,134,134
+NSLL,S,1
+NSEL,R,LOC,X,-125,-90
+*GET,xmax,KP,11,LOC,X
+*GET,xmin,KP,1,LOC,X
+DIAMETER = xmax - xmin    !DIAMETER PÅ DEN "KUGLE" DER SIDDER I HOFTESKÅLEN
+RATIO = DIAMETER/((DIAMETER/2)*(DIAMETER/2)*PI)      !FORHOLD MELLEM DIAMETER MED 1MM TYKKELSE OG AREAL AF HELE KUGLE
+TOT_FORCE = WEIGHT*RATIO      !DEN FORCE DER GÅR IND PÅ VORES TVÆRSNIT AF KNOGLEN
+*GET,tnum,NODE,0,COUNT,,,
+F,ALL,FY,-TOT_FORCE/tnum
+NSEL,ALL
+
 *ENDIF
 
 FINISH	! Exit the preprocessor
@@ -180,9 +240,6 @@ FINISH	! Exit the preprocessor
 ! =================================================!
 
 /SOL	! Enter the solution module
-
-
-
 
 
 
