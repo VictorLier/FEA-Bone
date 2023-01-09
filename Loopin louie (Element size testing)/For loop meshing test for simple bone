@@ -392,19 +392,14 @@ FINISH
 
 !*GET,Displaysment,NODE,33,U,SUM,,  !Vi skal finde spændning
 
-FILENAME = CHRVAL(DIV)   ! Fil Navn
+FILENAME = 'testFile'           ! Fil Navn - Husk at slette sidste ananlyse med samme navn
 
+*cfopen,FILENAME,txt,,APPEND    !Smider en ny linje i text filen
 
+*vwrite,meshx,Maxdisp           ! Skriver de forskellige data
+(2(E15.6))                          ! Formattere data. Don't at me
 
-
-*cfopen,FILENAME,txt
-
-*vwrite,meshx,Maxdisp
-(2(E15.6))
-
-
-
-*cfclose
+*cfclose                        ! Lukker den text fil
 
 /CLEAR,START ! Clear the ANSYS workspace
 *ENDDO !End Loop
