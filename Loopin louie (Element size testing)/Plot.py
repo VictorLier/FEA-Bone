@@ -1,30 +1,16 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
-def ImportData(Directory):
-    array = np.empty([2,1])
-    i=1
-    while True:
-        try:
-            Filename = Directory + "\\" "i" + ".txt"
-            Load = np.loadtxt(Filename)
-            print(Load)
-            array = np.append(array, Load)
-            i = i+1
-        except:
-            break
-    
-    return array
+FileName = 'testFile.txt'
 
+Directory = 'C:\\Users\\Victor\\Documents\\DTU\\41812 FEA\\Project 2\\ANSYS\\'
 
-array = ImportData(r"C:\Users\Victor\Documents\DTU\41812 FEA\Project 2\ANSYS")
+FilSti = Directory + FileName
 
-Directory = r"C:\Users\Victor\Documents\DTU\41812 FEA\Project 2\ANSYS"
+print (FilSti)
 
-Filename = Directory + "\\" "1" + ".txt"
+data = np.loadtxt(FilSti)
 
-Load = np.loadtxt(Filename)
-print(Load)
-
-#print(array)
-
+plt.plot(data[:,0],data[:,1])
+plt.show()
