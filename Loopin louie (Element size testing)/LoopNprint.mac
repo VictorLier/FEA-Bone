@@ -33,6 +33,7 @@ meshx=10/(1.15**DIV)
 ! Printing
 !============
 
+/IMAGE,SAVE,CHRVAL(DIV),PNG
 
 FILENAME = 'testFile'           ! Fil Navn - Husk at slette sidste ananlyse med samme navn
 

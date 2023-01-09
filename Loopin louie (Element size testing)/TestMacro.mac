@@ -363,8 +363,15 @@ FINISH	! Exit the solution module
 SET,FIRST
 PLDISP,2
 
+/EFACET,1   
+PLNSOL, S,EQV, 0,1.0
+
+
 NSORT,U,SUM,,1
 *GET,Maxdisp,SORT,,MAX
+
+
+
 
 !*END
 
