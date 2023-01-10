@@ -6,7 +6,7 @@ FINISH
 ! Setting up for Loop
 ! =================================================!
 Start = 1	! Increment
-End  = 10	! End of increment
+End  = 100	! End of increment
 !nincr = end - start
 !*dim,MeshLengths,table,nincr,1,1
 
@@ -15,16 +15,16 @@ End  = 10	! End of increment
 
 ! Variables
 
-meshx=10/(1.15**DIV)
+meshx= 10.5 - DIV/10
 
-
+/NERR,0
 
 !================================================
 !
 !
 !Run some code here
 !
-*USE,'C:\Users\Victor\Documents\DTU\41812 FEA\Project 2\Github\FEA-Bone-1\Loopin louie (Element size testing)\TestMacro.mac',meshx
+*USE,'C:\Users\s204414\Desktop\Bone day 7\Composite w hip cartilage.mac',meshx
 !
 !================================================
 
@@ -39,7 +39,7 @@ FILENAME = 'testFile'           ! Fil Navn - Husk at slette sidste ananlyse med 
 
 *cfopen,FILENAME,txt,,APPEND    !Smider en ny linje i text filen
 
-*vwrite,meshx,Maxdisp           ! Skriver de forskellige data
+*vwrite,meshx,Maxstress           ! Skriver de forskellige data
 (2(E15.6))                          ! Formattere data. Don't at me
 
 *cfclose                        ! Lukker den text fil

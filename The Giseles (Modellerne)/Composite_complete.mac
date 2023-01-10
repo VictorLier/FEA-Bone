@@ -10,7 +10,8 @@
 
 FINISH		 ! Make sure current ANSYS module is closed
 /CLEAR!,START ! Clear the ANSYS workspace 
-
+/UIS,MSGPOP,4     ! Supress errors
+/NERR,0,,,0,0
 ! White background
 /RGB,INDEX,100,100,100, 0   
 /RGB,INDEX, 80, 80, 80,13   
@@ -53,8 +54,8 @@ WEIGHT = 400 ![N]
 !*  
 IOPTN,IGES,SMOOTH   
 IOPTN,MERGE,YES 
-IOPTN,SOLID,YES 
-IOPTN,SMALL,YES 
+IOPTN,SOLID,NO 
+IOPTN,SMALL,NO 
 IOPTN,GTOLER, DEFA  
 IGESIN,'Outer geometry','igs',' '
 
@@ -74,8 +75,8 @@ AL,all      ! Area from all lines
 !*  
 IOPTN,IGES,SMOOTH   
 IOPTN,MERGE,YES 
-IOPTN,SOLID,YES 
-IOPTN,SMALL,YES 
+IOPTN,SOLID,NO 
+IOPTN,SMALL,NO
 IOPTN,GTOLER, DEFA  
 IGESIN,'Compact spongy transition geometry','igs',' '
 
@@ -99,8 +100,8 @@ ASBA,1,2,,,KEEP
 !*  
 IOPTN,IGES,SMOOTH   
 IOPTN,MERGE,YES 
-IOPTN,SOLID,YES 
-IOPTN,SMALL,YES 
+IOPTN,SOLID,NO 
+IOPTN,SMALL,NO
 IOPTN,GTOLER, DEFA  
 IGESIN,'Spongy marrow transition geometry','igs',' '
 
@@ -127,8 +128,8 @@ NUMCMP,AREA
 !*  
 IOPTN,IGES,SMOOTH   
 IOPTN,MERGE,YES 
-IOPTN,SOLID,YES 
-IOPTN,SMALL,YES 
+IOPTN,SOLID,NO 
+IOPTN,SMALL,NO
 IOPTN,GTOLER, DEFA  
 IGESIN,'Only cartilage retry','igs',' '
 
@@ -146,8 +147,8 @@ AL,64,65,66,67,68,69,70,337
 !*  
 IOPTN,IGES,SMOOTH   
 IOPTN,MERGE,YES 
-IOPTN,SOLID,YES 
-IOPTN,SMALL,YES 
+IOPTN,SOLID,NO 
+IOPTN,SMALL,NO
 IOPTN,GTOLER, DEFA  
 IGESIN,'Hip cartilage','igs',' '
 
