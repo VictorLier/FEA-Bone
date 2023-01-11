@@ -18,8 +18,6 @@ FINISH		 ! Make sure current ANSYS module is closed
 /RGB,INDEX, 60, 60, 60,14   
 /RGB,INDEX, 0, 0, 0,15  
 
-!!!x = 127, y = -2841.6875
-
 ! =================================================!
 ! INPUT DATA - including material
 ! =================================================!
@@ -28,12 +26,12 @@ PI = 4*ATAN(1.0) ! Define variable PI as 3.1415...
 
 ! Remember to update title
 *dim,TITLE_TEXT,string,20 ! Maximum 20 characters
-/TITLE,%TITLE_TEXT(1)% Project 2
+/TITLE,%TITLE_TEXT(1)% Project 2 - %meshx%
 
 YOUNG_COMPACT = 19e3  ![N/mm^2]
 YOUNG_SPONGY = 10e3   ![N/mm^2]
 YOUNG_MARROW = 0.001e3 ![N/mm^2]
-YOUNG_CARTILAGE = 2500
+YOUNG_CARTILAGE = 2500  ![N/mm^2]
 POISSON_COMPACT = 0.4         !E.g. steel: 0.3 [-]
 POISSON_SPONGY = 0.2
 POISSON_MARROW = 0.3
@@ -264,6 +262,14 @@ CM,MYELEM,ELEM
 CMSEL,S,MYELEM,ELEM
 PLNSOL,S,EQV
 
+KSEL,S,KP,,106,106
+NSLK,S
 NSORT,S,EQV,,1
 *GET,Maxstress,SORT,,MAX
+NSEL,ALL
+PLNSOL,S,EQV
+
+
+
+
 FINISH

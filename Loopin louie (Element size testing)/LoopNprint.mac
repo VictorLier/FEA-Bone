@@ -6,7 +6,7 @@ FINISH
 ! Setting up for Loop
 ! =================================================!
 Start = 1	! Increment
-End  = 100	! End of increment
+End  = 104	! End of increment
 !nincr = end - start
 !*dim,MeshLengths,table,nincr,1,1
 
@@ -15,7 +15,7 @@ End  = 100	! End of increment
 
 ! Variables
 
-meshx= 10.5 - DIV/10
+meshx= 10.6 - DIV/10
 
 /NERR,0
 
@@ -24,7 +24,7 @@ meshx= 10.5 - DIV/10
 !
 !Run some code here
 !
-*USE,'C:\Users\s204414\Desktop\Bone day 7\Composite w hip cartilage.mac',meshx
+*USE,'C:\Users\s204414\Desktop\Bone day 8\Composite w hip cartilage.mac',meshx
 !
 !================================================
 
