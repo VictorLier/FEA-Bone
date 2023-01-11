@@ -1,0 +1,47 @@
+FINISH
+/CLEAR,start
+
+
+! =================================================!
+! Setting up for Loop
+! =================================================!
+Start = 1	! Increment
+End  = 100	! End of increment
+
+! Make incremental loop
+*DO,DIV,Start,End,1
+
+! Variables
+MINWEIGHT=400 !N
+PEAK=15000 !N
+WEIGHT=(14600/99)*DIV+(25000/99)
+
+/NERR,0
+
+!================================================
+!
+!
+!Run some code here
+!
+*USE,'/zhome/58/d/155333/Desktop/Peak load/Composite w hip cartilage.mac',WEIGHT
+!
+!================================================
+
+
+!============
+! Printing
+!============
+
+/IMAGE,SAVE,CHRVAL(DIV),PNG
+
+FILENAME = 'testFile'           ! Fil Navn - Husk at slette sidste ananlyse med samme navn
+
+*cfopen,FILENAME,txt,,APPEND    !Smider en ny linje i text filen
+
+*vwrite,WEIGHT,Maxstress           ! Skriver de forskellige data
+(2(E15.6))                          ! Formattere data. Don't at me
+
+*cfclose                        ! Lukker den text fil
+
+/CLEAR,START ! Clear the ANSYS workspace
+*ENDDO !End Loop
