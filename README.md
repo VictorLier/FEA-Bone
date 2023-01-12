@@ -89,3 +89,5 @@ Gør min' ting, så alle ved, jeg' benhård
 Du vil gi' din højre arm, arh
 Du vil gi' din højre arm for at være ben
 Du vil gi' din højre arm)
+
+https://openoregon.pressbooks.pub/bodyphysics/chapter/stress-and-strain-on-the-body/
