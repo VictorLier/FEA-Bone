@@ -45,6 +45,9 @@ M=30.34963218
 I=(1/12)*TH**4
 h=0.0175
 sigmamax=(M/I)*(TH/2)
+sigma0=sigmamax
+sigma1=sigmamax*0.5428571428
+sigma2=sigmamax*0.2571428572
 
 ! =================================================!
 ! GEOMETRY DEFINITIONS - in preprocessor (/PREP7)
@@ -294,16 +297,29 @@ NSEL,ALL
 !Force
 SELTOL,1E-6
 NSEL,S,LOC,Y,0.4225
-NSEL,R,LOC,X,0
-F,ALL,FX,72.66
+*GET,tnum,NODE,0,COUNT,,,
+F,ALL,FX,72.66/tnum
+NSEL,ALL
 
 !Moments pressure
-F,ALL,FY,-M/TH
-NSEL,ALL
+!SELTOL,1E-6
+!NSEL,S,LOC,Y,0.4225
+!NSEL,R,LOC,X,0
+!F,ALL,Fy,-M/TH
+!NSEL,ALL
+!SELTOL,1E-6
+!NSEL,S,LOC,Y,0.4225
+!NSEL,R,LOC,X,TH
+!F,ALL,Fy,M/TH
+!NSEL,ALL
+SELTOL,1E-6
 NSEL,S,LOC,Y,0.4225
-NSEL,R,LOC,X,TH
-F,ALL,FY,M/TH
-NSEL,ALL
+CP,,,ALL
+SFL,3,PRES,sigma1,sigma0
+SFL,7,PRES,sigma2,sigma1
+SFL,10,PRES,sigma2,-sigma2
+SFL,13,PRES,-sigma1,-sigma2
+SFL,16,PRES,-sigma0,-sigma1
 
 FINISH! Exit the preprocessor
 
