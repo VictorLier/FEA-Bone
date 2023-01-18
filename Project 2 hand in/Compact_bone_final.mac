@@ -283,5 +283,12 @@ FINISH	! Exit the solution module
 SET,FIRST
 PLDISP,2
 
+! Recieves the maximum stress in a specific point (used for mesh convergence analysis)
+KSEL,S,KP,,106,106
+NSLK,S
+NSORT,S,EQV,,1
+*GET,Maxstress,SORT,,MAX
+NSEL,ALL
+PLNSOL,S,EQV
 
 FINISH
