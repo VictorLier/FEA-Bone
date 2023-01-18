@@ -1,0 +1,282 @@
+! =================================================!
+! ANSYS APDL-scripts - Simple Bone
+!     - Bone
+!    -----------------------------------------
+!       Geometry: [m]
+!       Force:    [N]
+!       Moment:   [Nm]
+!       Pressure: [Pa]
+! =================================================!
+
+FINISH		 ! Make sure current ANSYS module is closed
+/CLEAR,START ! Clear the ANSYS workspace 
+/UIS,MSGPOP,4     ! Supress errors
+/NERR,0,,,0,0
+
+! White background
+/RGB,INDEX,100,100,100, 0   
+/RGB,INDEX, 80, 80, 80,13   
+/RGB,INDEX, 60, 60, 60,14   
+/RGB,INDEX, 0, 0, 0,15  
+
+! =================================================!
+! INPUT DATA - including material
+! =================================================!
+
+PI = 4*ATAN(1.0) ! Define variable PI as 3.1415...
+
+! Remember to update title
+*dim,TITLE_TEXT,string,20 ! Maximum 20 characters
+/TITLE,%TITLE_TEXT(1)% Project 2
+
+YOUNG_COMPACT = 19e3  ![N/mm^2]
+YOUNG_SPONGY = 10e3   ![N/mm^2]
+YOUNG_MARROW = 0.001e3 ![N/mm^2]
+YOUNG_CARTILAGE = 2500
+POISSON_COMPACT = 0.4         !E.g. steel: 0.3 [-]
+POISSON_SPONGY = 0.2
+POISSON_MARROW = 0.3
+POISSON_CARTILAGE = 0.3
+TIMO = 1000*YOUNG_COMPACT
+
+WEIGHT = 400 ![N]
+
+! =================================================!
+! GEOMETRY DEFINITIONS - in preprocessor (/PREP7)
+! =================================================!
+/AUX15  
+!*  
+IOPTN,IGES,SMOOTH   
+IOPTN,MERGE,YES 
+IOPTN,SOLID,YES 
+IOPTN,SMALL,YES 
+IOPTN,GTOLER, DEFA  
+IGESIN,'Outer geometry','igs',' '
+
+/PREP7 ! Enter the preprocessor
+
+LDELE,135,138,,1
+LDELE,2,3,,1
+NUMMRG,KP,0.0001
+NUMCMP,LINE
+NUMCMP,KP
+LGEN,2,1,131,,-0.0404,0.0136,2842.686,,,1
+
+*ASK,FORCETYPE,Select force of bodyweight: 1=>Distributed 2=>Point force 3=>Distributed on hip cartilage
+*ASK,KNEEJOINT,Select boundary in knee: 1=>Fully clamped 2=>Can rotate in kneejoint 3=>Cartilage in knee
+
+AL,all      ! Area from all lines
+
+*IF,KNEEJOINT,EQ,3,THEN
+/AUX15  
+!*  
+IOPTN,IGES,SMOOTH   
+IOPTN,MERGE,YES 
+IOPTN,SOLID,YES 
+IOPTN,SMALL,YES 
+IOPTN,GTOLER, DEFA  
+IGESIN,'Only cartilage retry','igs',' '
+
+/PREP7 ! Enter the preprocessor
+LGEN,2,132,133,,0,0,2842.686,,,1
+NUMMRG,KP,0.001
+
+AL,74,75,76,77,78,79,80,81,133
+AL,64,65,66,67,68,69,70,132
+*ENDIF
+
+*IF,FORCETYPE,EQ,3,THEN
+/AUX15  
+!*  
+IOPTN,IGES,SMOOTH   
+IOPTN,MERGE,YES 
+IOPTN,SOLID,YES 
+IOPTN,SMALL,YES 
+IOPTN,GTOLER, DEFA  
+IGESIN,'Hip cartilage','igs',' '
+
+/PREP7 ! Enter the preprocessor
+*IF,KNEEJOINT,EQ,3,THEN
+LGEN,2,134,134,,-0.0404,0.0136,2842.686,,,1
+*ELSEIF,KNEEJOINT,LE,3,THEN
+LGEN,2,132,132,,-0.0404,0.0136,2842.686,,,1
+*ENDIF
+NUMMRG,KP,0.001
+
+LSEL,S,LINE,,128,131
+LSEL,A,LINE,,1,12,
+*IF,KNEEJOINT,EQ,3,THEN
+LSEL,A,LINE,,134,134
+*ELSEIF,KNEEJOINT,LE,3,THEN
+LSEL,A,LINE,,132,132
+*ENDIF
+AL,ALL
+LSEL,ALL
+*ENDIF
+
+! =================================================!
+! MATERIAL DEFINITIONS
+! =================================================! 
+
+MP,EX,1,YOUNG_COMPACT
+MP,PRXY,1,POISSON_COMPACT
+MP,EX,2,YOUNG_SPONGY
+MP,PRXY,2,POISSON_SPONGY
+MP,EX,3,YOUNG_MARROW
+MP,PRXY,3,POISSON_MARROW
+MP,EX,4,YOUNG_CARTILAGE
+MP,PRXY,4,POISSON_CARTILAGE
+
+! =================================================!
+! ELEMENT DEFINITIONS AND MESHING
+! =================================================!
+
+ET,1,PLANE183
+MSHAPE,0,2D
+KEYOPT,1,3,2
+R,1,35
+LESIZE,ALL,1.5,,,
+
+TYPE,1
+MAT,1
+AMESH,1
+
+MAT,4
+AMESH,2,3
+
+*IF,FORCETYPE,EQ,3,THEN
+MAT,4
+AMESH,4
+*ENDIF
+
+
+! =================================================!
+! DEFINE BOUNDARY CONDITIONS AND LOADS
+! =================================================! 
+
+*IF,KNEEJOINT,EQ,1,THEN
+NSEL,S,LOC,Y,-214.6875
+D,ALL,,,,,,ALL
+NSEL,ALL
+
+*ELSEIF,KNEEJOINT,EQ,2,THEN
+KSEL,S,KP,,72,72
+NSLK,S
+D,ALL,,,,,,UX,UY
+KSEL,ALL
+NSEL,ALL
+
+*IF,FORCETYPE,LE,2,THEN
+KSEL,S,KP,,6,6
+NSLK,S
+D,ALL,,,,,,UX
+KSEL,ALL
+NSEL,ALL
+
+*ELSEIF,FORCETYPE,EQ,3,THEN
+*IF,KNEEJOINT,EQ,3,THEN
+LSEL,S,LINE,,134,134
+*ELSEIF,KNEEJOINT,LE,2,THEN
+LSEL,S,LINE,,132,132
+*ENDIF
+NSLL,S,0
+NSEL,R,LOC,X,-125,-90
+D,ALL,,,,,,UX
+LSEL,ALL
+NSEL,ALL
+*ENDIF
+
+*ELSEIF,KNEEJOINT,EQ,3,THEN
+*IF,FORCETYPE,LE,2,THEN
+KSEL,S,KP,,6,6
+NSLK,S
+D,ALL,,,,,,UX
+KSEL,ALL
+NSEL,ALL
+*ELSEIF,FORCETYPE,EQ,3,THEN
+*IF,KNEEJOINT,EQ,3,THEN
+LSEL,S,LINE,,134,134
+*ELSEIF,KNEEJOINT,LE,2,THEN
+LSEL,S,LINE,,132,132
+*ENDIF
+NSLL,S,0
+NSEL,R,LOC,X,-125,-90
+D,ALL,,,,,,UX
+LSEL,ALL
+NSEL,ALL
+*ENDIF
+
+LSEL,S,LINE,,133,133
+NSLL,S,0
+!NSEL,R,LOC,X,-213,-177
+D,ALL,,,,,,UX,UY
+NSEL,ALL
+LSEL,ALL
+
+LSEL,S,LINE,,132,132
+NSLL,S,0
+!NSEL,R,LOC,X,-158,-120
+D,ALL,,,,,,UX,UY
+NSEL,ALL
+LSEL,ALL
+*ENDIF
+
+*IF,FORCETYPE,EQ,1,THEN
+LSEL,S,LINE,,1,10
+NSLL,S,1
+*GET,xmax,KP,11,LOC,X
+*GET,xmin,KP,1,LOC,X
+DIAMETER = xmax - xmin    !DIAMETER PÅ DEN "KUGLE" DER SIDDER I HOFTESKÅLEN
+RATIO = DIAMETER/((DIAMETER/2)*(DIAMETER/2)*PI)      !FORHOLD MELLEM DIAMETER MED 1MM TYKKELSE OG AREAL AF HELE KUGLE
+TOT_FORCE = WEIGHT*RATIO      !DEN FORCE DER GÅR IND PÅ VORES TVÆRSNIT AF KNOGLEN
+*GET,tnum,NODE,0,COUNT,,,
+F,ALL,FY,-TOT_FORCE/tnum
+NSEL,ALL
+
+*ELSEIF,FORCETYPE,EQ,2,THEN
+FK,6,FY,-WEIGHT
+
+*ELSEIF,FORCETYPE,EQ,3,THEN
+*IF,KNEEJOINT,EQ,3,THEN
+LSEL,S,LINE,,134,134
+*ELSEIF,KNEEJOINT,LE,2,THEN
+LSEL,S,LINE,,132,132
+*ENDIF
+NSLL,S,1
+NSEL,R,LOC,X,-125,-90
+*GET,xmax,KP,11,LOC,X
+*GET,xmin,KP,1,LOC,X
+DIAMETER = xmax - xmin    !DIAMETER PÅ DEN "KUGLE" DER SIDDER I HOFTESKÅLEN
+RATIO = DIAMETER/((DIAMETER/2)*(DIAMETER/2)*PI)      !FORHOLD MELLEM DIAMETER MED 1MM TYKKELSE OG AREAL AF HELE KUGLE
+TOT_FORCE = WEIGHT*RATIO      !DEN FORCE DER GÅR IND PÅ VORES TVÆRSNIT AF KNOGLEN
+*GET,tnum,NODE,0,COUNT,,,
+F,ALL,FY,-TOT_FORCE/tnum
+NSEL,ALL
+
+*ENDIF
+
+FINISH	! Exit the preprocessor
+
+! =================================================!
+! SOLUTION - in solution (/SOL)
+! =================================================!
+
+/SOL	! Enter the solution module
+
+
+
+
+SOLVE	! Obtain solution
+
+FINISH	! Exit the solution module
+
+
+! =================================================!
+! STUDY RESULTS - in postprocessor (/POST1) 
+! =================================================!
+/POST1
+SET,FIRST
+PLDISP,2
+
+
+FINISH
