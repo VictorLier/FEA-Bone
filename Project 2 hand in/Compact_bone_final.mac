@@ -44,6 +44,9 @@ WEIGHT = 400 ![N]
 ! =================================================!
 ! GEOMETRY DEFINITIONS - in preprocessor (/PREP7)
 ! =================================================!
+
+! Imports geometry and moves them around in the coordinatesystem so they match
+
 /AUX15  
 !*  
 IOPTN,IGES,SMOOTH   
@@ -62,8 +65,8 @@ NUMCMP,LINE
 NUMCMP,KP
 LGEN,2,1,131,,-0.0404,0.0136,2842.686,,,1
 
-*ASK,FORCETYPE,Select force of bodyweight: 1=>Distributed 2=>Point force 3=>Distributed on hip cartilage
-*ASK,KNEEJOINT,Select boundary in knee: 1=>Fully clamped 2=>Can rotate in kneejoint 3=>Cartilage in knee
+*ASK,FORCETYPE,Select force of bodyweight: 1=>Distributed 2=>Point force 3=>Distributed on hip cartilage      !Asks how you want the load distributed
+*ASK,KNEEJOINT,Select boundary in knee: 1=>Fully clamped 2=>Can rotate in kneejoint 3=>Cartilage in knee        !Asks what boundary conditions to use
 
 AL,all      ! Area from all lines
 
@@ -154,6 +157,8 @@ AMESH,4
 ! DEFINE BOUNDARY CONDITIONS AND LOADS
 ! =================================================! 
 
+! Sets boundary conditions and loads after what was chosen in the initial ASKS
+
 *IF,KNEEJOINT,EQ,1,THEN
 NSEL,S,LOC,Y,-214.6875
 D,ALL,,,,,,ALL
@@ -226,9 +231,9 @@ LSEL,S,LINE,,1,10
 NSLL,S,1
 *GET,xmax,KP,11,LOC,X
 *GET,xmin,KP,1,LOC,X
-DIAMETER = xmax - xmin    !DIAMETER PÅ DEN "KUGLE" DER SIDDER I HOFTESKÅLEN
-RATIO = DIAMETER/((DIAMETER/2)*(DIAMETER/2)*PI)      !FORHOLD MELLEM DIAMETER MED 1MM TYKKELSE OG AREAL AF HELE KUGLE
-TOT_FORCE = WEIGHT*RATIO      !DEN FORCE DER GÅR IND PÅ VORES TVÆRSNIT AF KNOGLEN
+DIAMETER = xmax - xmin    ! Approximate diameter of femur head
+RATIO = DIAMETER/((DIAMETER/2)*(DIAMETER/2)*PI)      ! Ratio between the diameter times 1mm and area of the full femur head
+TOT_FORCE = WEIGHT*RATIO      ! The force that pushes on our cross section of the bone
 *GET,tnum,NODE,0,COUNT,,,
 F,ALL,FY,-TOT_FORCE/tnum
 NSEL,ALL
@@ -246,9 +251,9 @@ NSLL,S,1
 NSEL,R,LOC,X,-125,-90
 *GET,xmax,KP,11,LOC,X
 *GET,xmin,KP,1,LOC,X
-DIAMETER = xmax - xmin    !DIAMETER PÅ DEN "KUGLE" DER SIDDER I HOFTESKÅLEN
-RATIO = DIAMETER/((DIAMETER/2)*(DIAMETER/2)*PI)      !FORHOLD MELLEM DIAMETER MED 1MM TYKKELSE OG AREAL AF HELE KUGLE
-TOT_FORCE = WEIGHT*RATIO      !DEN FORCE DER GÅR IND PÅ VORES TVÆRSNIT AF KNOGLEN
+DIAMETER = xmax - xmin                               ! Approximate diameter of femur head
+RATIO = DIAMETER/((DIAMETER/2)*(DIAMETER/2)*PI)      ! Ratio between the diameter times 1mm and area of the full femur head
+TOT_FORCE = WEIGHT*RATIO                             ! The force that pushes on our cross section of the bone
 *GET,tnum,NODE,0,COUNT,,,
 F,ALL,FY,-TOT_FORCE/tnum
 NSEL,ALL
