@@ -1,0 +1,47 @@
+FINISH
+/CLEAR,start
+
+
+! =================================================!
+! Setting up for Loop
+! =================================================!
+Start = 1	! Increment
+End  = 104	! End of increment
+!nincr = end - start
+!*dim,MeshLengths,table,nincr,1,1
+
+! Make incremental loop
+*DO,DIV,Start,End,1
+
+! Mesh variable (max element length) that changes for each loop
+meshx= 10.6 - DIV/10
+
+/NERR,0
+
+!================================================
+!
+!
+!Run some code here
+!
+*USE,'C:\Users\s204414\Desktop\Bone day 8\Composite w hip cartilage.mac',meshx         ! Insert file path on own PC
+!
+!================================================
+
+
+!============
+! Printing
+!============
+
+/IMAGE,SAVE,CHRVAL(DIV),PNG
+
+FILENAME = 'testFile'           ! File name - remember to change name between each loop
+
+*cfopen,FILENAME,txt,,APPEND    ! New line in file
+
+*vwrite,meshx,Maxstress           ! Writes data
+(2(E15.6))                          ! Formats data
+
+*cfclose                        ! Closes textfile
+
+/CLEAR,START ! Clear the ANSYS workspace
+*ENDDO !End Loop
