@@ -1,0 +1,272 @@
+! =================================================!
+! ANSYS APDL-scripts - Simple Bone
+!     - Bone
+!    -----------------------------------------
+!       Geometry: [m]
+!       Force:    [N]
+!       Moment:   [Nm]
+!       Pressure: [Pa]
+! =================================================!
+
+FINISH		 ! Make sure current ANSYS module is closed
+/CLEAR,START ! Clear the ANSYS workspace 
+/UIS,MSGPOP,4     ! Supress errors
+/NERR,0,,,0,0
+! White background
+/RGB,INDEX,100,100,100, 0   
+/RGB,INDEX, 80, 80, 80,13   
+/RGB,INDEX, 60, 60, 60,14   
+/RGB,INDEX, 0, 0, 0,15  
+
+! =================================================!
+! INPUT DATA - including material
+! =================================================!
+
+PI = 4*ATAN(1.0) ! Define variable PI as 3.1415...
+
+! Remember to update title
+*dim,TITLE_TEXT,string,20 ! Maximum 20 characters
+/TITLE,%TITLE_TEXT(1)% Project 2 - %meshx%
+
+YOUNG_COMPACT = 19e3  ![N/mm^2]
+YOUNG_SPONGY = 10e3   ![N/mm^2]
+YOUNG_MARROW = 0.001e3 ![N/mm^2]
+YOUNG_CARTILAGE = 2500  ![N/mm^2]
+POISSON_COMPACT = 0.4         !E.g. steel: 0.3 [-]
+POISSON_SPONGY = 0.2
+POISSON_MARROW = 0.3
+POISSON_CARTILAGE = 0.3
+TIMO = 1000*YOUNG_COMPACT
+
+WEIGHT = 400 ![N]
+
+! =================================================!
+! GEOMETRY DEFINITIONS - in preprocessor (/PREP7)
+! =================================================!
+/AUX15  
+!*  
+IOPTN,IGES,SMOOTH   
+IOPTN,MERGE,YES 
+IOPTN,SOLID,NO 
+IOPTN,SMALL,NO 
+IOPTN,GTOLER, DEFA  
+IGESIN,'Outer geometry','igs',' '
+
+/PREP7 ! Enter the preprocessor
+
+LDELE,135,138,,1
+LDELE,2,3,,1
+NUMMRG,KP,0.0001
+NUMCMP,LINE
+NUMCMP,KP
+LGEN,2,1,131,,-0.0404,0.0136,2842.686,,,1
+
+AL,all      ! Area from all lines
+
+/AUX15  
+!*  
+IOPTN,IGES,SMOOTH   
+IOPTN,MERGE,YES 
+IOPTN,SOLID,NO 
+IOPTN,SMALL,NO  
+IOPTN,GTOLER, DEFA  
+IGESIN,'Compact spongy transition geometry','igs',' '
+
+/PREP7 ! Enter the preprocessor
+
+LDELE,285,288,,1
+LDELE,133,134,,1
+NUMMRG,KP,0.0001
+NUMCMP,LINE
+NUMCMP,KP
+LGEN,2,132,281,,0,0,2842.686,,,1
+
+!Area inside compact bone lines
+!Area inside marrow lines
+LSEL,S,LINE,,132,281
+AL,all
+LSEL,ALL
+
+ASBA,1,2,,,KEEP
+
+/AUX15  
+!*  
+IOPTN,IGES,SMOOTH   
+IOPTN,MERGE,YES 
+IOPTN,SOLID,NO 
+IOPTN,SMALL,NO 
+IOPTN,GTOLER, DEFA  
+IGESIN,'Spongy marrow transition geometry','igs',' '
+
+/PREP7 ! Enter the preprocessor
+
+LDELE,340,343,,1
+LDELE,283,284,,1
+NUMMRG,KP,0.0001
+NUMCMP,LINE
+NUMCMP,KP
+LGEN,2,282,336,,0,0,2842.686,,,1
+
+!Area inside marrow lines
+LSEL,S,LINE,,282,336
+AL,all
+LSEL,ALL
+
+ASBA,2,1,,,KEEP
+
+NUMCMP,AREA
+
+!KNEE CARTILAGE
+/AUX15  
+!*  
+IOPTN,IGES,SMOOTH   
+IOPTN,MERGE,YES 
+IOPTN,SOLID,NO 
+IOPTN,SMALL,NO 
+IOPTN,GTOLER, DEFA  
+IGESIN,'Only cartilage retry','igs',' '
+
+/PREP7 ! Enter the preprocessor
+LGEN,2,337,338,,0,0,2842.686,,,1
+NUMMRG,KP,0.001
+
+AL,74,75,76,77,78,79,80,81,338
+AL,64,65,66,67,68,69,70,337
+
+!HIP CARTILAGE
+/AUX15  
+!*  
+IOPTN,IGES,SMOOTH   
+IOPTN,MERGE,YES 
+IOPTN,SOLID,NO 
+IOPTN,SMALL,NO 
+IOPTN,GTOLER, DEFA  
+IGESIN,'Hip cartilage','igs',' '
+
+/PREP7 ! Enter the preprocessor
+LGEN,2,339,339,,-0.0404,0.0136,2842.686,,,1
+NUMMRG,KP,0.001
+
+LSEL,S,LINE,,128,131
+LSEL,A,LINE,,1,12,
+LSEL,A,LINE,,339,339
+AL,ALL
+AL,128,129,130,131,1,2,3,4,5,6,7,8,9,10,11,12,339
+LSEL,ALL
+
+! =================================================!
+! MATERIAL DEFINITIONS
+! =================================================! 
+
+MP,EX,1,YOUNG_COMPACT
+MP,PRXY,1,POISSON_COMPACT
+MP,EX,2,YOUNG_SPONGY
+MP,PRXY,2,POISSON_SPONGY
+MP,EX,3,YOUNG_MARROW
+MP,PRXY,3,POISSON_MARROW
+MP,EX,4,YOUNG_CARTILAGE
+MP,PRXY,4,POISSON_CARTILAGE
+
+! =================================================!
+! ELEMENT DEFINITIONS AND MESHING
+! =================================================!
+
+ET,1,PLANE183
+MSHAPE,0,2D
+KEYOPT,1,3,2
+LESIZE,ALL,1.5,,,
+
+TYPE,1
+MAT,1
+AMESH,2
+
+TYPE,1
+MAT,2
+AMESH,3
+
+TYPE,1
+MAT,3
+AMESH,1
+
+TYPE,1
+MAT,4
+AMESH,4,5
+
+TYPE,1
+MAT,4
+AMESH,6
+
+! =================================================!
+! DEFINE BOUNDARY CONDITIONS AND LOADS
+! =================================================! 
+
+!Kneejoint and hip joint boundary
+LSEL,S,LINE,,339,339
+NSLL,S,0
+NSEL,R,LOC,X,-125,-90
+D,ALL,,,,,,UX!,UY
+NSEL,ALL
+LSEL,ALL
+
+LSEL,S,LINE,,338,338
+NSLL,S,0
+!NSEL,R,LOC,X,-213,-177
+D,ALL,,,,,,UX,UY
+NSEL,ALL
+LSEL,ALL
+
+LSEL,S,LINE,,337,337
+NSLL,S,0
+!NSEL,R,LOC,X,-158,-120
+D,ALL,,,,,,UX,UY
+NSEL,ALL
+LSEL,ALL
+
+!Bodyweight
+LSEL,S,LINE,,339,339
+NSLL,S,1
+NSEL,R,LOC,X,-125,-90
+*GET,xmax,KP,11,LOC,X
+*GET,xmin,KP,1,LOC,X
+DIAMETER = xmax - xmin    !DIAMETER PÅ DEN "KUGLE" DER SIDDER I HOFTESKÅLEN
+RATIO = DIAMETER/((DIAMETER/2)*(DIAMETER/2)*PI)      !FORHOLD MELLEM DIAMETER MED 1MM TYKKELSE OG AREAL AF HELE KUGLE
+TOT_FORCE = WEIGHT*RATIO      !DEN FORCE DER GÅR IND PÅ VORES TVÆRSNIT AF KNOGLEN
+*GET,tnum,NODE,0,COUNT,,,
+F,ALL,FY,-TOT_FORCE/tnum
+NSEL,ALL
+
+
+FINISH	! Exit the preprocessor
+
+! =================================================!
+! SOLUTION - in solution (/SOL)
+! =================================================!
+
+/SOL	! Enter the solution module
+
+SOLVE	! Obtain solution
+
+FINISH	! Exit the solution module
+
+
+! =================================================!
+! STUDY RESULTS - in postprocessor (/POST1) 
+! =================================================!
+/POST1
+SET,FIRST
+!PLDISP,2
+
+ASEL,S,AREA,,1,3
+ESLA,S
+CM,MYELEM,ELEM
+CMSEL,S,MYELEM,ELEM
+PLNSOL,S,EQV
+
+KSEL,S,KP,,106,106
+NSLK,S
+NSORT,S,EQV,,1
+*GET,Maxstress,SORT,,MAX
+NSEL,ALL
+PLNSOL,S,EQV
+
+FINISH
