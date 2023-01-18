@@ -26,7 +26,7 @@ PI = 4*ATAN(1.0) ! Define variable PI as 3.1415...
 
 ! Remember to update title
 *dim,TITLE_TEXT,string,20 ! Maximum 20 characters
-/TITLE,%TITLE_TEXT(1)% Project 2 - %meshx%
+/TITLE,%TITLE_TEXT(1)% Project 2
 
 YOUNG_COMPACT = 19e3  ![N/mm^2]
 YOUNG_SPONGY = 10e3   ![N/mm^2]
@@ -43,6 +43,9 @@ WEIGHT = 400 ![N]
 ! =================================================!
 ! GEOMETRY DEFINITIONS - in preprocessor (/PREP7)
 ! =================================================!
+
+! Imports geometry and moves them around in the coordinatesystem so they match
+
 /AUX15  
 !*  
 IOPTN,IGES,SMOOTH   
@@ -228,9 +231,9 @@ NSLL,S,1
 NSEL,R,LOC,X,-125,-90
 *GET,xmax,KP,11,LOC,X
 *GET,xmin,KP,1,LOC,X
-DIAMETER = xmax - xmin    !DIAMETER PÅ DEN "KUGLE" DER SIDDER I HOFTESKÅLEN
-RATIO = DIAMETER/((DIAMETER/2)*(DIAMETER/2)*PI)      !FORHOLD MELLEM DIAMETER MED 1MM TYKKELSE OG AREAL AF HELE KUGLE
-TOT_FORCE = WEIGHT*RATIO      !DEN FORCE DER GÅR IND PÅ VORES TVÆRSNIT AF KNOGLEN
+DIAMETER = xmax - xmin                               ! Approximate diameter of femur head 
+RATIO = DIAMETER/((DIAMETER/2)*(DIAMETER/2)*PI)      ! Ratio between the diameter times 1mm and area of the full femur head
+TOT_FORCE = WEIGHT*RATIO                             ! The force that pushes on our cross section of the bone
 *GET,tnum,NODE,0,COUNT,,,
 F,ALL,FY,-TOT_FORCE/tnum
 NSEL,ALL
@@ -254,14 +257,15 @@ FINISH	! Exit the solution module
 ! =================================================!
 /POST1
 SET,FIRST
-!PLDISP,2
 
+! Displays von mises stress nodal solution in just the bone - removing the cartilage
 ASEL,S,AREA,,1,3
 ESLA,S
 CM,MYELEM,ELEM
 CMSEL,S,MYELEM,ELEM
 PLNSOL,S,EQV
 
+! Recieves the maximum stress in a specific point (used for mesh convergence analysis)
 KSEL,S,KP,,106,106
 NSLK,S
 NSORT,S,EQV,,1
